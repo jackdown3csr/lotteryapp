@@ -20,3 +20,18 @@
 		@apply bg-zinc-950 text-neutral-200;
 	}
 }
+
+@layer components{
+
+	.stats{
+		@apply bg-slate-400 text-white p-4 flex-1 rounded-md border-[#2b2b2b] border-2
+
+	}
+
+	.stats-container {
+
+		@apply bg-[1a1a1a] p-5 rounded-lg border-[#4a4a4a]
+
+
+	}
+}
