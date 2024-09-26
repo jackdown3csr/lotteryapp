@@ -23,8 +23,7 @@ return(
        
         <div>
             <h1 className='text-lg font-bold '>Cypher Draw</h1>
-            <p className='text-xs text-gray-600 truncate'>User: {activeAccount?.address.substring(0,5)}...
-                {activeAccount?.address.substring(activeAccount?.address.length,activeAccount?.address.length-5)} </p>
+            <p className='text-xs text-gray-600 truncate'>OG Season</p>
         </div>
         </div>
         <div className='hidden md:flex md:col-span-3 items-center justify-center rounded-md'>

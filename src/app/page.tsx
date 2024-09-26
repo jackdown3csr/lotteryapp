@@ -5,8 +5,20 @@ import { useActiveWallet } from "thirdweb/react";
 import  Header from "./components/Header";
 import Login from "./components/Login";
 import { useState } from "react";
-import { readContract } from "thirdweb";
+import { readContract, getContract, toEther } from "thirdweb";
 import { useReadContract } from "thirdweb/react";
+import { client } from "./client";
+import { chain } from "./chain";
+import { LOTTERY_CONTRACT_ADDRESS } from "../../constants/contracts";
+import { toTokens } from "thirdweb";
+
+
+const contract = getContract({
+  client: client,
+  chain: chain,
+  address: LOTTERY_CONTRACT_ADDRESS,
+})
+
 
 
 export default function Home() {
@@ -14,8 +26,17 @@ export default function Home() {
   const [quantity, setQuantity] = useState<number>(1);
 
 
- 
 
+  const { data:remainingTickets, isPending} = useReadContract({
+    contract,
+    method: "function RemainingTickets() view returns (uint256)",
+    params: [1n]
+  }) ;
+
+
+  
+
+/* */
 
     if (!wallet) return ( <Login/>)
 
@@ -25,6 +46,7 @@ export default function Home() {
 
         <div className="flex-1">
         <Header />
+       
 
 <div className="space-y-5 md:space-y-0 m-5 md:flex md:flex-row items-start justify-center md:space-x-5">
     <div className="stats-container">
@@ -32,12 +54,13 @@ export default function Home() {
   
         <div className="flex justify-between p-2 space-x-2">
           <div className="stats">
-              <h2 className="text-sm">total pool</h2>
-               <p className="text-xl">10 GNET</p>
+              <h2 className="text-sm">Winning Pot</h2>
+              <p></p>
+             
           </div>
            <div className="stats">
-             <h2 className="text-sm">Ticket remain</h2>
-            <p className="text-xl">100</p>
+             <h2 className="text-sm text-nowrap">Tickets remaining</h2>
+            <p className="text-xl">{!isPending && Number(remainingTickets)}</p>
            </div>
        </div>
 
@@ -45,13 +68,13 @@ export default function Home() {
     </div>
     <div className="stats-container space-y-2">
       <div className="stats-container">
-        <div className="flex justify-between items-center text-white">
+        <div className="flex justify-between items-center text-white space-x-1">
           <h2>Price per ticket</h2>
-          <p>1 GNET</p>
+          <p></p>
         </div>
         <div className="flex text-white items-center space-x-2 p-4 ">
           <p>TIckets</p>
-          <input className="flex w-full bg-transparent text-right outline-none" type="number"
+          <input className="flex w-full bg-transparent text-end pr-1 outline-none" type="number"
            min={1}
            max={10}
            value={quantity}
@@ -59,14 +82,15 @@ export default function Home() {
         </div>
 
         <div className="space-y-2 mt-5">
-          <div className="flex items-center justify-between text-orange-500 text-s italic font-extrabold">
+          <div className="flex items-center text-sm justify-between text-orange-500 text-s italic font-bold">
             <p>Total Cost of tickets</p>
-            <p>0.9</p>
+            <p>dadada</p>
+        
           
           </div>
           <div className="flex items-center justify-between text-orange-500 text-xs italic">
             <p>Service fees</p>
-            <p>0.01Gnet</p>
+            <p></p>
           </div>
           <div className="flex items-center justify-between text-orange-500 text-xs italic">
             <p>+ Network fees</p>

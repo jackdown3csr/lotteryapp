@@ -30,7 +30,7 @@
 
 	.stats-container {
 
-		@apply bg-[1a1a1a] p-5 rounded-lg border-[#4a4a4a]
+		@apply bg-[1a1a1a] p-5 rounded-lg border-[#3f3f3f]
 
 
 	}
