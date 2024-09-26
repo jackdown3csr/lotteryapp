@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Cypher Lottery",
   description:
-    "Is your lucky day today? ",
+    "Is your lucky day ? ",
 };
 
 
