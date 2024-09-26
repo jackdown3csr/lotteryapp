@@ -13,11 +13,6 @@ import { LOTTERY_CONTRACT_ADDRESS } from "../../constants/contracts";
 import { toTokens } from "thirdweb";
 
 
-const contract = getContract({
-  client: client,
-  chain: chain,
-  address: LOTTERY_CONTRACT_ADDRESS,
-})
 
 
 
@@ -25,16 +20,46 @@ export default function Home() {
   const wallet = useActiveWallet();
   const [quantity, setQuantity] = useState<number>(1);
 
+  const contract = getContract({
+    client: client,
+    chain: chain,
+    address: LOTTERY_CONTRACT_ADDRESS,
+  });
+
+  const { data:winningPot, isPending:winningPotPending } = useReadContract({
+    contract,
+    method: "function CurrentWinningReward() view returns (uint256)",
+    params: []
+  });
+  
+
+ 
 
 
-  const { data:remainingTickets, isPending} = useReadContract({
+  const { data:remainingTickets, isPending: remainingTicketsPending} = useReadContract({
     contract,
     method: "function RemainingTickets() view returns (uint256)",
     params: [1n]
   }) ;
+ 
+  const { data:ticketPrice, isPending:ticketPricePending } = useReadContract({
+    contract,
+    method: "function ticketPrice() view returns (uint256)",
+    params: []
+  });
+
+  const { data:ticketCommission, isPending:ticketCommissionPending } = useReadContract({
+    contract,
+    method: "function ticketCommission() view returns (uint256)",
+    params: []
+  });
 
 
-  
+  const totalPrice =  Number(ticketPrice)*quantity
+
+console.log("quantity", quantity)
+  console.log(totalPrice)
+
 
 /* */
 
@@ -55,12 +80,12 @@ export default function Home() {
         <div className="flex justify-between p-2 space-x-2">
           <div className="stats">
               <h2 className="text-sm">Winning Pot</h2>
-              <p></p>
+              <p>{!winningPotPending && winningPot && toTokens(BigInt(Number(winningPot)),18)}</p>
              
           </div>
            <div className="stats">
              <h2 className="text-sm text-nowrap">Tickets remaining</h2>
-            <p className="text-xl">{!isPending && Number(remainingTickets)}</p>
+            <p className="text-xl">{!remainingTicketsPending && Number(remainingTickets)}</p>
            </div>
        </div>
 
@@ -70,7 +95,8 @@ export default function Home() {
       <div className="stats-container">
         <div className="flex justify-between items-center text-white space-x-1">
           <h2>Price per ticket</h2>
-          <p></p>
+          <p>{!ticketPricePending && ticketPrice && toTokens(BigInt(Number(ticketPrice)),18)}</p>
+          
         </div>
         <div className="flex text-white items-center space-x-2 p-4 ">
           <p>TIckets</p>
@@ -80,17 +106,19 @@ export default function Home() {
            value={quantity}
            onChange={(e) => setQuantity(Number(e.target.value))}/>
         </div>
+        
+        
 
         <div className="space-y-2 mt-5">
           <div className="flex items-center text-sm justify-between text-orange-500 text-s italic font-bold">
             <p>Total Cost of tickets</p>
-            <p>dadada</p>
+            <p>{!ticketPricePending && ticketPrice && totalPrice>0 && toTokens(BigInt(totalPrice),18)}</p>
         
           
           </div>
           <div className="flex items-center justify-between text-orange-500 text-xs italic">
             <p>Service fees</p>
-            <p></p>
+            <p>{!ticketCommissionPending && ticketCommission && toTokens(BigInt(Number(ticketCommission)),18)}</p>
           </div>
           <div className="flex items-center justify-between text-orange-500 text-xs italic">
             <p>+ Network fees</p>
